@@ -595,6 +595,13 @@
         "key": "resultExpression",
         "type": "zeebe:taskHeader"
       },
+      "condition": {
+        "property": "operationId",
+        "oneOf": [
+          "read_objects__read_objects"
+        ],
+        "type": "simple"
+      },
       "type": "Text"
     },
     {
