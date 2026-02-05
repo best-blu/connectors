@@ -39,7 +39,7 @@ $\color{red}{\text{When the Automic Server is reachable only with https protocol
   ```bash
   sudo keytool -importcert -alias example_cert -file server_cert.pem -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
 
-- and Starting Camunda Connector Java application by adding this option:
+- Starting Camunda Connector Java application by adding this option:
     ```bash
   JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=PATH_TO_FILE -Djavax.net.ssl.trustStorePassword=PASSWORD
 
