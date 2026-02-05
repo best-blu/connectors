@@ -28,6 +28,22 @@ To execute the workload in Automic, the user should provide the following inform
 - Timezone
 - Execution option: 'Once' (for a single execution) or 'Recurring' (for a periodic execution)
 
+
+## Important Note
+When the Automic Server is reachable only with https protocol and has a certificate signed through a CA, it is important to trust that server by:
+- Downloading the certificate of that server with following command:
+  ```bash
+  openssl s_client -showcerts -connect host.com:443 -servername host.com </dev/null | openssl x509 -outform PEM > server_cert.pem
+
+- Upload to certificate to Java truststore:
+  ```bash
+  sudo keytool -importcert -alias example_cert -file server_cert.pem -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
+
+- and start Camunda Connector Java application by adding this option:
+    ```bash
+  JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=PATH_TO_FILE -Djavax.net.ssl.trustStorePassword=PASSWORD
+
+
 ### Support
 For any questions or issues regarding the Camunda Automic Connector, 
 please reach out to our support team at [camunda-dev@best-blu.de](mailto:camunda-dev@best-blu.de)
