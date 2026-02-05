@@ -30,7 +30,7 @@ To execute the workload in Automic, the user should provide the following inform
 
 
 ## Important Note
-When the **Automic Server is reachable only with https protocol and has a certificate signed through a CA**, it is important to trust that server by:
+$\color{red}{\text{When the Automic Server is reachable only with https protocol and has a certificate signed through a CA}}$, it is important to trust that server by:
 - Downloading the certificate of that server with following command:
   ```bash
   openssl s_client -showcerts -connect host.com:443 -servername host.com </dev/null | openssl x509 -outform PEM > server_cert.pem
