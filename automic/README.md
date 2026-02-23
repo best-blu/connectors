@@ -43,7 +43,59 @@ $\color{red}{\text{When the Automic Server is reachable only with https protocol
     ```bash
   JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=PATH_TO_FILE -Djavax.net.ssl.trustStorePassword=PASSWORD
 
+## Integrate UCS Root CA Certificate for Connectors
 
-### Support
+### Prerequisites
+- Docker and Docker Compose installed
+- `ucs-root-ca.crt` certificate available
+
+### Setup
+
+1. **Create certificate directory:**
+```bash
+   mkdir -p certs
+   cp /path/to/ucs-root-ca.crt ./certs/
+```
+
+2. **Create Java truststore:**
+```bash
+   docker run --rm -v $(pwd)/certs:/certs \
+     eclipse-temurin:21-jdk \
+     keytool -importcert \
+     -file /certs/ucs-root-ca.crt \
+     -alias ucs-root-ca \
+     -keystore /certs/truststore.jks \
+     -storepass changeit \
+     -noprompt
+```
+
+3. **Update docker-compose.yaml:**
+   
+   Add to `connectors` service:
+```yaml
+   connectors:
+     environment:
+       # ... existing variables ...
+       - JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStore=/certs/truststore.jks -Djavax.net.ssl.trustStorePassword=changeit
+     
+     volumes:
+       - ./certs/truststore.jks:/certs/truststore.jks:ro
+```
+
+4. **Restart containers:**
+```bash
+   docker compose down
+   docker compose up -d
+   docker compose logs -f connectors
+```
+
+### Verification
+```bash
+docker compose logs connectors | grep -i "trust\|ssl"
+```
+
+
+
+#### Support
 For any questions or issues regarding the Camunda Automic Connector, 
 please reach out to our support team at [camunda-dev@best-blu.de](mailto:camunda-dev@best-blu.de)
